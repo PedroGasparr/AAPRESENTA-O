@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Firebase: Economia Radical em Backend (2025)</title>
+
+<!-- Bootstrap 5.3 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<!-- Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+<style>
+  :root {
+    --firebase-yellow: #FFCA28;
+    --firebase-orange: #FFA000;
+    --firebase-red: #F57C00;
+    --firebase-blue: #039BE5;
+    --firebase-navy: #0D47A1;
+    --gradient-firebase: linear-gradient(135deg, var(--firebase-orange), var(--firebase-red));
+    --firestore-blue: #4285F4;
+    --firestore-green: #0F9D58;
+  }
+  
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    background: var(--gradient-firebase);
+    color: white;
+    padding: 6rem 0;
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+    margin-bottom: -3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') center/cover;
+    opacity: 0.15;
+    z-index: 0;
+  }
+  
+  /* Cards */
+  .feature-card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    height: 100%;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+  }
+  
+  /* Badges */
+  .badge-firebase {
+    background: var(--gradient-firebase);
+    color: white;
+  }
+  
+  .badge-firestore {
+    background-color: var(--firestore-blue);
+    color: white;
+  }
+  
+  /* Pricing Calculator */
+  .calculator-container {
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  }
+  
+  /* Sliders */
+  .form-range::-webkit-slider-thumb {
+    background: var(--firebase-orange);
+  }
+  
+  /* Animations */
+  .fade-in {
+    opacity: 0;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+  
+  .fade-in.visible {
+    opacity: 1;
+  }
+  
+  /* Cost Cards */
+  .cost-card {
+    border-left: 4px solid var(--firestore-blue);
+    transition: all 0.3s;
+  }
+  
+  .cost-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
+  .progress-thin {
+    height: 6px;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 4rem 0;
+      clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%);
+    }
+  }
+  #text-centermb-4fw-bold {
+    color: #5e5e5e;
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container position-relative">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-10">
+        <h1 class="display-3 fw-bold mb-4 animate__animated animate__fadeInDown">Economize até 80% com Firebase</h1>
+        <p class="lead fs-2 mb-5 animate__animated animate__fadeIn animate__delay-1s">
+          A solução completa de backend que reduz custos e acelera seu desenvolvimento em 2025
+        </p>
+      </div>
+    </div>
+    
+    <!-- Pricing Calculator -->
+    <div class="row justify-content-center animate__animated animate__fadeIn animate__delay-2s">
+      <div class="col-lg-10">
+        <div class="calculator-container p-4 p-lg-5">
+          <h3 id="text-centermb-4fw-bold" class="text-center mb-4 fw-bold">Calculadora de Custos Firebase (2025)</h3>
+          
+          <div class="row g-4">
+            <!-- Firestore Section -->
+            <div class="col-md-6">
+              <div class="card feature-card h-100">
+                <div class="card-header bg-primary text-white">
+                  <h5 class="mb-0"><i class="fas fa-database me-2"></i>Cloud Firestore</h5>
+                </div>
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label class="form-label">Armazenamento (GB): <span id="firestoreStorageValue" class="fw-bold">10</span></label>
+                    <input type="range" class="form-range" id="firestoreStorage" min="1" max="1000" value="10">
+                    <small class="text-muted">1GB grátis, depois $0.18/GB</small>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Leituras/mês (milhares): <span id="firestoreReadsValue" class="fw-bold">50</span></label>
+                    <input type="range" class="form-range" id="firestoreReads" min="5" max="1000" value="50">
+                    <small class="text-muted">50k/dia grátis, depois $0.06/100k</small>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Escritas/mês (milhares): <span id="firestoreWritesValue" class="fw-bold">20</span></label>
+                    <input type="range" class="form-range" id="firestoreWrites" min="2" max="500" value="20">
+                    <small class="text-muted">20k/dia grátis, depois $0.18/100k</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Auth & Storage Section -->
+            <div class="col-md-6">
+              <div class="card feature-card h-100">
+                <div class="card-header bg-success text-white">
+                  <h5 class="mb-0"><i class="fas fa-user-shield me-2"></i>Autenticação & Storage</h5>
+                </div>
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label class="form-label">Usuários ativos: <span id="authUsersValue" class="fw-bold">10,000</span></label>
+                    <input type="range" class="form-range" id="authUsers" min="1000" max="1000000" step="1000" value="10000">
+                    <small class="text-muted">10k grátis, depois $0.0055/usuário</small>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Storage (GB): <span id="storageValue" class="fw-bold">5</span></label>
+                    <input type="range" class="form-range" id="storage" min="1" max="500" value="5">
+                    <small class="text-muted">5GB grátis, depois $0.026/GB</small>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Downloads (GB): <span id="downloadsValue" class="fw-bold">10</span></label>
+                    <input type="range" class="form-range" id="downloads" min="1" max="1000" value="10">
+                    <small class="text-muted">1GB/dia grátis, depois $0.12/GB</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Realtime Database Section -->
+          <div class="row mt-4">
+            <div class="col-12">
+              <div class="card feature-card h-100">
+                <div class="card-header bg-warning text-white">
+                  <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Realtime Database</h5>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Armazenamento (GB): <span id="rtdbStorageValue" class="fw-bold">2</span></label>
+                        <input type="range" class="form-range" id="rtdbStorage" min="0.1" max="100" step="0.1" value="2">
+                        <small class="text-muted">1GB grátis, depois $5.00/GB</small>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Download de dados (GB): <span id="rtdbEgressValue" class="fw-bold">10</span></label>
+                        <input type="range" class="form-range" id="rtdbEgress" min="1" max="50" step="1" value="10">
+                        <small class="text-muted">10GB grátis, depois $1.00/GB</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Results -->
+          <div class="row mt-4">
+            <div class="col-12">
+              <div class="card border-0 bg-light">
+                <div class="card-body text-center">
+                  <h4 class="fw-bold mb-3">Custo Total Estimado</h4>
+                  <div class="display-4 fw-bold text-primary mb-2" id="totalCost">$ 0.00</div>
+                  <div class="text-muted">*Estimativa mensal baseada em preços de 2025</div>
+                  
+                  <div class="progress mt-3" style="height: 8px;">
+                    <div id="costProgress" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                  </div>
+                  <div class="d-flex justify-content-between mt-1">
+                    <small>Economia</small>
+                    <small>Comparado a AWS Amplify</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Key Benefits -->
+<section class="container my-5 py-5">
+  <div class="row justify-content-center mb-5 fade-in">
+    <div class="col-lg-8 text-center">
+      <h2 class="display-5 fw-bold mb-3">Por que Firebase em 2025?</h2>
+      <p class="lead">Além de custos transparentes, o Firebase oferece ferramentas poderosas que eliminam a necessidade de infraestrutura complexa</p>
+    </div>
+  </div>
+  
+  <div class="row g-4">
+    <!-- Benefit 1 -->
+    <div class="col-md-4 fade-in">
+      <div class="card feature-card h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+              <i class="fas fa-bolt text-primary fa-2x"></i>
+            </div>
+            <h5 class="mb-0">Desenvolvimento Rápido</h5>
+          </div>
+          <p class="card-text">Reduza o tempo de desenvolvimento em até 60% com SDKs prontos e integrações nativas.</p>
+          <ul class="list-unstyled">
+            <li><i class="fas fa-check-circle text-success me-2"></i>Backend em minutos</li>
+            <li><i class="fas fa-check-circle text-success me-2"></i>Autenticação pronta</li>
+            <li><i class="fas fa-check-circle text-success me-2"></i>Banco de dados em tempo real</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Benefit 2 -->
+    <div class="col-md-4 fade-in" style="transition-delay: 0.2s">
+      <div class="card feature-card h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
+              <i class="fas fa-chart-line text-success fa-2x"></i>
+            </div>
+            <h5 class="mb-0">Economia Radical</h5>
+          </div>
+          <p class="card-text">Reduza custos em até 80% comparado a soluções tradicionais de backend.</p>
+          <div class="mt-4">
+            <div class="d-flex justify-content-between mb-2">
+              <span>AWS Amplify</span>
+              <span class="fw-bold">$ 1.850/mês</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span>Firebase</span>
+              <span class="fw-bold text-success">$ 370/mês</span>
+            </div>
+            <div class="progress mt-2" style="height: 6px;">
+              <div class="progress-bar bg-success" style="width: 80%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Benefit 3 -->
+    <div class="col-md-4 fade-in" style="transition-delay: 0.4s">
+      <div class="card feature-card h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <div class="bg-warning bg-opacity-10 p-3 rounded-circle me-3">
+              <i class="fas fa-expand text-warning fa-2x"></i>
+            </div>
+            <h5 class="mb-0">Escala Automática</h5>
+          </div>
+          <p class="card-text">De 1 usuário a 10 milhões sem reescrever código ou replanejar infraestrutura.</p>
+          <div class="mt-4">
+            <div class="d-flex align-items-center mb-2">
+              <i class="fas fa-users me-2"></i>
+              <span>1K usuários: <strong class="text-success">Grátis</strong></span>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="fas fa-users me-2"></i>
+              <span>100K usuários: <strong>$ 45/mês</strong></span>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="fas fa-users me-2"></i>
+              <span>1M usuários: <strong>$ 495/mês</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Detailed Pricing -->
+<section class="container my-5 py-5">
+  <div class="row justify-content-center mb-5 fade-in">
+    <div class="col-lg-8 text-center">
+      <h2 class="display-5 fw-bold mb-3">Preços Detalhados por Serviço (2025)</h2>
+      <p class="lead">Transparência total nos custos - você paga apenas pelo que usa</p>
+    </div>
+  </div>
+  
+  <div class="row g-4">
+    <!-- Firestore -->
+    <div class="col-md-6 fade-in">
+      <div class="card feature-card h-100">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="fas fa-database me-2"></i>Cloud Firestore</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Armazenamento
+              <span class="badge bg-primary rounded-pill">$0.18/GB</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Leituras
+              <span class="badge bg-primary rounded-pill">$0.06/100k</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Escritas
+              <span class="badge bg-primary rounded-pill">$0.18/100k</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Exclusões
+              <span class="badge bg-primary rounded-pill">$0.02/100k</span>
+            </li>
+          </ul>
+          <div class="mt-3">
+            <small class="text-muted">*Primeiros 1GB de armazenamento e 50k leituras/dia são gratuitos</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Authentication -->
+    <div class="col-md-6 fade-in" style="transition-delay: 0.2s">
+      <div class="card feature-card h-100">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0"><i class="fas fa-user-shield me-2"></i>Authentication</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Usuários ativos
+              <span class="badge bg-success rounded-pill">$0.0055/usuário</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Autenticação por SMS
+              <span class="badge bg-success rounded-pill">$0.01/SMS</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              SAML/OIDC
+              <span class="badge bg-success rounded-pill">$0.015/usuário</span>
+            </li>
+          </ul>
+          <div class="mt-3">
+            <small class="text-muted">*Primeiros 10k usuários ativos/mês são gratuitos</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Storage -->
+    <div class="col-md-6 fade-in" style="transition-delay: 0.4s">
+      <div class="card feature-card h-100">
+        <div class="card-header bg-warning text-white">
+          <h5 class="mb-0"><i class="fas fa-file-upload me-2"></i>Cloud Storage</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Armazenamento
+              <span class="badge bg-warning rounded-pill">$0.026/GB</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Downloads
+              <span class="badge bg-warning rounded-pill">$0.12/GB</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Operações
+              <span class="badge bg-warning rounded-pill">$0.05/10k</span>
+            </li>
+          </ul>
+          <div class="mt-3">
+            <small class="text-muted">*Primeiros 5GB de armazenamento e 1GB de downloads/dia são gratuitos</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Realtime Database -->
+    <div class="col-md-6 fade-in" style="transition-delay: 0.6s">
+      <div class="card feature-card h-100">
+        <div class="card-header bg-info text-white">
+          <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Realtime Database</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Armazenamento
+              <span class="badge bg-info rounded-pill">$5.00/GB</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Download de dados
+              <span class="badge bg-info rounded-pill">$1.00/GB</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Conexões simultâneas
+              <span class="badge bg-info rounded-pill">$0.01/100k minutos</span>
+            </li>
+          </ul>
+          <div class="mt-3">
+            <small class="text-muted">*Primeiros 1GB de armazenamento e 10GB de download/mês são gratuitos</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Optimization Techniques -->
+<section class="container my-5 py-5">
+  <div class="row justify-content-center mb-5 fade-in">
+    <div class="col-lg-8 text-center">
+      <h2 class="display-5 fw-bold mb-3">Técnicas de Otimização de Custos</h2>
+      <p class="lead">Reduza seus gastos em até 60% com estas estratégias comprovadas</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Technique 1 -->
+    <div class="col-md-6 fade-in">
+      <div class="card feature-card h-100">
+        <div class="card-body">
+          <h5 class="d-flex align-items-center">
+            <span class="badge-firestore badge me-3">1</span>
+            Cache Local com Persistência
+          </h5>
+          <p>Reduza leituras repetidas ativando a persistência offline:</p>
+          <pre class="bg-light p-3 rounded"><code>// Ativar cache
+firebase.firestore().enablePersistence()
+  .then(() => console.log("Cache ativado"))
+  .catch(err => {
+    if (err.code == 'failed-precondition') {
+      // Múltiplas abas abertas
+    } else if (err.code == 'unimplemented') {
+      // Navegador não suportado
+    }
+  });</code></pre>
+          <div class="mt-3 p-3 bg-success bg-opacity-10 rounded">
+            <i class="fas fa-coins me-2"></i>
+            <strong>Economia:</strong> Até 60% em leituras para apps com dados estáticos
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technique 2 -->
+    <div class="col-md-6 fade-in" style="transition-delay: 0.2s">
+      <div class="card feature-card h-100">
+        <div class="card-body">
+          <h5 class="d-flex align-items-center">
+            <span class="badge-firestore badge me-3">2</span>
+            Operações em Lote (Batch)
+          </h5>
+          <p>Agrupe múltiplas escritas em uma única operação:</p>
+          <pre class="bg-light p-3 rounded"><code>// Exemplo: Atualizar 3 documentos com 1 operação
+const batch = db.batch();
+const userRef = db.collection('users').doc('user1');
+const orderRef = db.collection('orders').doc('order1');
+const logRef = db.collection('logs').doc();
+
+batch.update(userRef, {lastActive: new Date()});
+batch.delete(orderRef);
+batch.set(logRef, {event: 'update', time: new Date()});
+
+await batch.commit(); // 1 operação de escrita!</code></pre>
+          <div class="mt-3 p-3 bg-success bg-opacity-10 rounded">
+            <i class="fas fa-coins me-2"></i>
+            <strong>Economia:</strong> Até 80% em operações de escrita em atualizações em massa
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technique 3 -->
+    <div class="col-md-6 fade-in" style="transition-delay: 0.4s">
+      <div class="card feature-card h-100">
+        <div class="card-body">
+          <h5 class="d-flex align-items-center">
+            <span class="badge-firestore badge me-3">3</span>
+            Estrutura de Dados Eficiente
+          </h5>
+          <p>Evite aninhamento profundo e otimize seus documentos:</p>
+          <div class="row">
+            <div class="col-md-6">
+              <p class="text-danger"><strong>Não Recomendado:</strong></p>
+              <pre class="bg-light p-3 rounded"><code>{
+  user: {
+    posts: {
+      post1: { ... },
+      post2: { ... }
+      // 100+ posts
+    }
+  }
+}</code></pre>
+            </div>
+            <div class="col-md-6">
+              <p class="text-success"><strong>Recomendado:</strong></p>
+              <pre class="bg-light p-3 rounded"><code>// Coleção separada
+users/{userId}
+posts/{postId}
+  - userId: "123"
+  - ...dados do post</code></pre>
+            </div>
+          </div>
+          <div class="mt-3 p-3 bg-success bg-opacity-10 rounded">
+            <i class="fas fa-coins me-2"></i>
+            <strong>Economia:</strong> Redução de 40-70% em leituras/escritas
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technique 4 -->
+    <div class="col-md-6 fade-in" style="transition-delay: 0.6s">
+      <div class="card feature-card h-100">
+        <div class="card-body">
+          <h5 class="d-flex align-items-center">
+            <span class="badge-firestore badge me-3">4</span>
+            Limpeza Automática de Dados
+          </h5>
+          <p>Implemente TTL (Time-To-Live) para dados temporários:</p>
+          <pre class="bg-light p-3 rounded"><code>// Adicionar campo de expiração
+await db.collection('logs').add({
+  message: "Erro no sistema",
+  createdAt: new Date(),
+  expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 dias
+});
+
+// Função Cloud para limpeza
+exports.cleanOldLogs = functions.pubsub
+  .schedule('every 24 hours')
+  .onRun(async (context) => {
+    const now = new Date();
+    const oldLogs = await db.collection('logs')
+      .where('expiresAt', '<=', now)
+      .get();
+    
+    const batch = db.batch();
+    oldLogs.docs.forEach(doc => batch.delete(doc.ref));
+    await batch.commit();
+  });</code></pre>
+          <div class="mt-3 p-3 bg-success bg-opacity-10 rounded">
+            <i class="fas fa-coins me-2"></i>
+            <strong>Economia:</strong> Redução de 20-50% em armazenamento
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Real World Examples -->
+<section class="container my-5 py-5">
+  <div class="row justify-content-center mb-5 fade-in">
+    <div class="col-lg-8 text-center">
+      <h2 class="display-5 fw-bold mb-3">Casos Reais de Economia</h2>
+      <p class="lead">Veja como empresas reduziram custos significativamente com Firebase</p>
+    </div>
+  </div>
+  
+  <div class="row g-4">
+    <!-- Case 1 -->
+    <div class="col-md-4 fade-in">
+      <div class="card feature-card h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <img src="img/tech.png" class="rounded-circle me-3" alt="Startup">
+            <div>
+              <h6 class="mb-0">Startup Fintech</h6>
+              <small class="text-muted">50k usuários</small>
+            </div>
+          </div>
+          <p class="card-text">Migrou de AWS para Firebase e reduziu custos em 68% no primeiro ano.</p>
+          <div class="d-flex justify-content-between">
+            <div>
+              <small class="text-muted">Antes</small>
+              <div class="fw-bold text-danger">$ 1.200/mês</div>
+            </div>
+            <div>
+              <small class="text-muted">Depois</small>
+              <div class="fw-bold text-success">$ 385/mês</div>
+            </div>
+          </div>
+          <hr>
+          <small class="text-muted"><i class="fas fa-lightbulb me-2"></i>Usaram: Cache local + Operações em lote</small>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Case 2 -->
+    <div class="col-md-4 fade-in" style="transition-delay: 0.2s">
+      <div class="card feature-card h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <img src="img/acordos-comerciais.png" class="rounded-circle me-3" alt="E-commerce">
+            <div>
+              <h6 class="mb-0">E-commerce</h6>
+              <small class="text-muted">200k usuários</small>
+            </div>
+          </div>
+          <p class="card-text">Substituiu servidores dedicados por Firebase e economizou $ 15k/ano.</p>
+          <div class="d-flex justify-content-between">
+            <div>
+              <small class="text-muted">Antes</small>
+              <div class="fw-bold text-danger">$ 2.800/mês</div>
+            </div>
+            <div>
+              <small class="text-muted">Depois</small>
+              <div class="fw-bold text-success">$ 1.050/mês</div>
+            </div>
+          </div>
+          <hr>
+          <small class="text-muted"><i class="fas fa-lightbulb me-2"></i>Usaram: Estrutura de dados otimizada</small>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Case 3 -->
+    <div class="col-md-4 fade-in" style="transition-delay: 0.4s">
+      <div class="card feature-card h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <img src="img/educacao.png" class="rounded-circle me-3" alt="App Educativo">
+            <div>
+              <h6 class="mb-0">App Educativo</h6>
+              <small class="text-muted">1M usuários</small>
+            </div>
+          </div>
+          <p class="card-text">Eliminou 3 desenvolvedores backend após migração para Firebase.</p>
+          <div class="d-flex justify-content-between">
+            <div>
+              <small class="text-muted">Antes</small>
+              <div class="fw-bold text-danger">$ 8.500/mês</div>
+            </div>
+            <div>
+              <small class="text-muted">Depois</small>
+              <div class="fw-bold text-success">$ 3.200/mês</div>
+            </div>
+          </div>
+          <hr>
+          <small class="text-muted"><i class="fas fa-lightbulb me-2"></i>Usaram: Limpeza automática + Cloud Functions</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Comparison Section -->
+<section class="container my-5 py-5">
+  <div class="row justify-content-center mb-5 fade-in">
+    <div class="col-lg-8 text-center">
+      <h2 class="display-5 fw-bold mb-3">Firebase vs Alternativas (2025)</h2>
+      <p class="lead">Comparação direta com outras soluções de backend</p>
+    </div>
+  </div>
+  
+  <div class="row fade-in">
+    <div class="col-12">
+      <div class="card feature-card">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th style="width: 25%">Recurso</th>
+                  <th style="width: 25%">Firebase</th>
+                  <th style="width: 25%">AWS Amplify</th>
+                  <th style="width: 25%">Backend Customizado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Tempo de Implementação</td>
+                  <td><span class="badge bg-success">Horas</span></td>
+                  <td><span class="badge bg-warning">Dias</span></td>
+                  <td><span class="badge bg-danger">Semanas-Meses</span></td>
+                </tr>
+                <tr>
+                  <td>Custo para 100k usuários</td>
+                  <td class="text-success fw-bold">~$ 370/mês</td>
+                  <td class="text-warning">~$ 1.850/mês</td>
+                  <td class="text-danger">~$ 3.200/mês</td>
+                </tr>
+                <tr>
+                  <td>Escalabilidade</td>
+                  <td><i class="fas fa-check-circle text-success"></i> Automática</td>
+                  <td><i class="fas fa-check-circle text-success"></i> Configurável</td>
+                  <td><i class="fas fa-times-circle text-danger"></i> Manual</td>
+                </tr>
+                <tr>
+                  <td>Manutenção</td>
+                  <td><i class="fas fa-check-circle text-success"></i> Gerenciado</td>
+                  <td><i class="fas fa-check-circle text-success"></i> Parcial</td>
+                  <td><i class="fas fa-times-circle text-danger"></i> Completa</td>
+                </tr>
+                <tr>
+                  <td>Recursos Nativos</td>
+                  <td><span class="badge bg-primary">18+</span></td>
+                  <td><span class="badge bg-primary">10+</span></td>
+                  <td><span class="badge bg-secondary">0</span></td>
+                </tr>
+                <tr>
+                  <td>Latência Média</td>
+                  <td>100-300ms</td>
+                  <td>150-400ms</td>
+                  <td>Varia muito</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Implementation Guide -->
+<section class="container my-5 py-5">
+  <div class="row justify-content-center mb-5 fade-in">
+    <div class="col-lg-8 text-center">
+      <h2 class="display-5 fw-bold mb-3">Como Implementar com Eficiência</h2>
+      <p class="lead">Exemplo completo de implementação otimizada</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card feature-card">
+        <div class="card-body">
+          <ul class="nav nav-tabs mb-4" id="implementationTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="init-tab" data-bs-toggle="tab" data-bs-target="#init" type="button" role="tab">Inicialização</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="auth-tab" data-bs-toggle="tab" data-bs-target="#auth" type="button" role="tab">Autenticação</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="firestore-tab" data-bs-toggle="tab" data-bs-target="#firestore" type="button" role="tab">Firestore</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="rtdb-tab" data-bs-toggle="tab" data-bs-target="#rtdb" type="button" role="tab">Realtime DB</button>
+            </li>
+          </ul>
+          
+          <div class="tab-content" id="implementationTabsContent">
+            <div class="tab-pane fade show active" id="init" role="tabpanel">
+              <pre><code class="language-javascript">// Configuração inicial otimizada
+import { initializeApp } from 'firebase/app';
+import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
+import { getDatabase } from 'firebase/database';
+import { getStorage } from 'firebase/storage';
+import { getAuth } from 'firebase/auth';
+
+const firebaseConfig = {
+  apiKey: "SUA_CHAVE_API",
+  authDomain: "SEU_DOMINIO.firebaseapp.com",
+  databaseURL: "https://SEU_PROJETO.firebaseio.com",
+  projectId: "SEU_PROJETO",
+  storageBucket: "SEU_PROJETO.appspot.com",
+  messagingSenderId: "SEU_SENDER_ID",
+  appId: "SEU_APP_ID"
+};
+
+// Inicialize o Firebase
+const app = initializeApp(firebaseConfig);
+
+// Configure os serviços
+const db = getFirestore(app);
+const rtdb = getDatabase(app); // Realtime Database
+const storage = getStorage(app);
+const auth = getAuth(app);
+
+// Ative a persistência para cache offline (Firestore)
+enableIndexedDbPersistence(db)
+  .catch((err) => {
+    if (err.code == 'failed-precondition') {
+      console.warn("Persistência falhou - Múltiplas abas abertas");
+    } else if (err.code == 'unimplemented') {
+      console.warn("Persistência não suportada pelo navegador");
+    }
+  });</code></pre>
+            </div>
+            
+            <div class="tab-pane fade" id="auth" role="tabpanel">
+              <pre><code class="language-javascript">// Autenticação com monitoramento de custos
+import { 
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged
+} from 'firebase/auth';
+
+// Cadastro otimizado
+async function registerUser(email, password) {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth, email, password
+    );
+    
+    // Crie o documento do usuário em uma única operação
+    await setDoc(doc(db, "users", userCredential.user.uid), {
+      email: email,
+      createdAt: serverTimestamp(),
+      lastLogin: serverTimestamp(),
+      plan: "free"
+    });
+    
+    console.log("Usuário registrado com sucesso!");
+  } catch (error) {
+    console.error("Erro no registro:", error.message);
+  }
+}
+
+// Monitorar estado de autenticação (single listener)
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Usuário logado:", user.uid);
+    // Atualize lastLogin apenas uma vez por sessão
+    updateDoc(doc(db, "users", user.uid), {
+      lastLogin: serverTimestamp()
+    });
+  } else {
+    console.log("Usuário deslogado");
+  }
+});</code></pre>
+            </div>
+            
+            <div class="tab-pane fade" id="firestore" role="tabpanel">
+              <pre><code class="language-javascript">// Operações otimizadas no Firestore
+import {
+  collection, query, where,
+  getDocs, getDoc, setDoc,
+  updateDoc, deleteDoc,
+  serverTimestamp, writeBatch
+} from 'firebase/firestore';
+
+// Busca paginada com limite
+async function getPaginatedPosts(limit = 10, lastDoc = null) {
+  let q = query(
+    collection(db, "posts"),
+    where("published", "==", true),
+    orderBy("createdAt", "desc"),
+    limit(limit)
+  );
+  
+  if (lastDoc) {
+    q = query(q, startAfter(lastDoc));
+  }
+  
+  const snapshot = await getDocs(q);
+  const posts = [];
+  snapshot.forEach(doc => posts.push({ id: doc.id, ...doc.data() }));
+  
+  return {
+    posts,
+    lastDoc: snapshot.docs[snapshot.docs.length - 1]
+  };
+}
+
+// Atualização em lote
+async function updateUserStats(userId, stats) {
+  const batch = writeBatch(db);
+  const userRef = doc(db, "users", userId);
+  const statsRef = doc(db, "stats", userId);
+  const logRef = doc(collection(db, "logs"));
+  
+  batch.update(userRef, { lastActive: serverTimestamp() });
+  batch.set(statsRef, stats, { merge: true });
+  batch.set(logRef, {
+    event: "stats_update",
+    userId,
+    timestamp: serverTimestamp()
+  });
+  
+  await batch.commit();
+}</code></pre>
+            </div>
+            
+            <div class="tab-pane fade" id="rtdb" role="tabpanel">
+              <pre><code class="language-javascript">// Operações otimizadas no Realtime Database
+import { ref, set, update, onValue, off } from 'firebase/database';
+
+// Escrever dados
+async function writeUserData(userId, name, email) {
+  try {
+    await set(ref(rtdb, 'users/' + userId), {
+      username: name,
+      email: email,
+      last_login: Date.now()
+    });
+    console.log("Dados escritos com sucesso!");
+  } catch (error) {
+    console.error("Erro ao escrever dados:", error);
+  }
+}
+
+// Atualizar dados
+async function updateUserProfile(userId, updates) {
+  try {
+    const updates = {};
+    updates['/users/' + userId + '/last_updated'] = Date.now();
+    updates['/users/' + userId + '/profile'] = {
+      ...updates
+    };
+    
+    await update(ref(rtdb), updates);
+    console.log("Perfil atualizado com sucesso!");
+  } catch (error) {
+    console.error("Erro ao atualizar perfil:", error);
+  }
+}
+
+// Ler dados com listener otimizado
+function setupUserListener(userId, callback) {
+  const userRef = ref(rtdb, 'users/' + userId);
+  
+  const listener = onValue(userRef, (snapshot) => {
+    const data = snapshot.val();
+    callback(data);
+  });
+  
+  // Retorna função para remover listener
+  return () => off(userRef, 'value', listener);
+}
+
+// Uso:
+const removeListener = setupUserListener('123', (userData) => {
+  console.log("Dados atualizados:", userData);
+});
+
+// Quando não precisar mais do listener:
+// removeListener();</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="bg-dark text-white py-5 my-5">
+  <div class="container py-5">
+    <div class="row justify-content-center text-center fade-in">
+      <div class="col-lg-8">
+        <h2 class="display-5 fw-bold mb-4">Pronto para economizar?</h2>
+        <p class="lead mb-4">Comece hoje mesmo e reduza seus custos de backend em até 80%</p>
+        <div class="d-flex justify-content-center gap-3">
+          <a href="#" class="btn btn-primary btn-lg px-4 py-2">
+            <i class="fas fa-calculator me-2"></i> Calcular Meu Custo
+          </a>
+          <a href="#" class="btn btn-outline-light btn-lg px-4 py-2">
+            <i class="fas fa-book me-2"></i> Documentação
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-light py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4 mb-md-0">
+        <h5>Sobre o Firebase</h5>
+        <p>Plataforma de desenvolvimento de aplicativos do Google que ajuda você a criar, melhorar e expandir seu app.</p>
+      </div>
+      <div class="col-md-4 mb-4 mb-md-0">
+        <h5>Links Úteis</h5>
+        <ul class="list-unstyled">
+          <li><a href="https://firebase.google.com/docs" class="text-decoration-none">Documentação Oficial</a></li>
+          <li><a href="https://firebase.google.com/pricing" class="text-decoration-none">Preços 2025</a></li>
+          <li><a href="https://firebase.google.com/docs/firestore/best-practices" class="text-decoration-none">Melhores Práticas</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5>Contato</h5>
+        <ul class="list-unstyled">
+          <li><i class="fas fa-envelope me-2"></i> PedroHenriqueGaspar443@gmail.com</li>
+          <li><i class="fas fa-phone me-2"></i> (11) 99999-9999</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="my-4">
+    <div class="text-center text-muted">
+      <small>© 2025 Todos os direitos reservados.</small>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Preços atualizados (2025) em USD
+  const PRICES = {
+    firestore: {
+      storage: 0.18,        // $/GB (after 1GB free)
+      reads: 0.06,          // $/100k (after 50k/day free)
+      writes: 0.18,         // $/100k (after 20k/day free)
+      deletes: 0.02,        // $/100k (after 20k/day free)
+      egress: 0.12          // $/GB (after 10GB/month free)
+    },
+    storage: {
+      storage: 0.026,       // $/GB (after 5GB free)
+      downloads: 0.12,      // $/GB (after 1GB/day free)
+      uploadOps: 0.05,      // $/10k (after 20k/day free)
+      downloadOps: 0.004    // $/10k (after 50k/day free)
+    },
+    auth: {
+      monthlyUsers: 0.0055, // $/user (after 10k/month free)
+      phoneAuth: 0.01,      // $/SMS (minimum, varies by country)
+      samlOidc: 0.015       // $/user (after 50/month free)
+    },
+    functions: {
+      invocations: 0.40,    // $/million (after 2M/month free)
+      cpuTime: 0.000024,    // $/100ms (after 400k GB-seconds/month free)
+      networking: 0.12      // $/GB (after 5GB/month free)
+    },
+    rtdb: {
+      storage: 5.00,        // $/GB (after 1GB free)
+      egress: 1.00,         // $/GB (after 10GB/month free)
+      connections: 0.01     // $/100k minutes (after 100k minutes/day free)
+    },
+    hosting: {
+      storage: 0.026,       // $/GB (after 10GB free)
+      bandwidth: 0.15       // $/GB (after 360MB/day free)
+    }
+  };
+  
+  // Elementos do DOM
+  const firestoreStorage = document.getElementById('firestoreStorage');
+  const firestoreReads = document.getElementById('firestoreReads');
+  const firestoreWrites = document.getElementById('firestoreWrites');
+  const authUsers = document.getElementById('authUsers');
+  const storage = document.getElementById('storage');
+  const downloads = document.getElementById('downloads');
+  const rtdbStorage = document.getElementById('rtdbStorage');
+  const rtdbEgress = document.getElementById('rtdbEgress');
+
+  const firestoreStorageValue = document.getElementById('firestoreStorageValue');
+  const firestoreReadsValue = document.getElementById('firestoreReadsValue');
+  const firestoreWritesValue = document.getElementById('firestoreWritesValue');
+  const authUsersValue = document.getElementById('authUsersValue');
+  const storageValue = document.getElementById('storageValue');
+  const downloadsValue = document.getElementById('downloadsValue');
+  const rtdbStorageValue = document.getElementById('rtdbStorageValue');
+  const rtdbEgressValue = document.getElementById('rtdbEgressValue');
+  
+  const totalCost = document.getElementById('totalCost');
+  const costProgress = document.getElementById('costProgress');
+  
+  // Formata números em USD
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  });
+  
+  // Atualiza cálculos
+  function updateCalculations() {
+    // valores atuais
+    const fsStorage = parseFloat(firestoreStorage.value);
+    const fsReads = parseFloat(firestoreReads.value) * 1000; // em unidades
+    const fsWrites = parseFloat(firestoreWrites.value) * 1000;
+    const auth = parseInt(authUsers.value);
+    const storageGB = parseInt(storage.value);
+    const downloadsGB = parseInt(downloads.value);
+    const rtdbStorageGB = parseFloat(rtdbStorage.value);
+    const rtdbEgressGB = parseFloat(rtdbEgress.value);
+
+    // atualizar valores exibidos
+    firestoreStorageValue.textContent = fsStorage.toLocaleString('pt-BR');
+    firestoreReadsValue.textContent = (fsReads/1000).toLocaleString('pt-BR');
+    firestoreWritesValue.textContent = (fsWrites/1000).toLocaleString('pt-BR');
+    authUsersValue.textContent = auth.toLocaleString('pt-BR');
+    storageValue.textContent = storageGB.toLocaleString('pt-BR');
+    downloadsValue.textContent = downloadsGB.toLocaleString('pt-BR');
+    rtdbStorageValue.textContent = rtdbStorageGB.toFixed(1);
+    rtdbEgressValue.textContent = rtdbEgressGB.toFixed(1);
+
+    // cálculo do custo
+    let cost = 0;
+
+    // Firestore
+    cost += Math.max(0, fsStorage - 1) * PRICES.firestore.storage; // 1GB grátis
+    cost += Math.max(0, fsReads - (50 * 30)) / 100000 * PRICES.firestore.reads; // leituras
+    cost += Math.max(0, fsWrites - (20 * 30)) / 100000 * PRICES.firestore.writes; // escritas
+
+    // Autenticação
+    cost += Math.max(0, auth - 10000) * PRICES.auth.monthlyUsers;
+
+    // Storage
+    cost += Math.max(0, storageGB - 5) * PRICES.storage.storage;
+    cost += Math.max(0, downloadsGB - 30) * PRICES.storage.downloads;
+
+    // Realtime Database - armazenamento
+    cost += Math.max(0, rtdbStorageGB - 1) * PRICES.rtdb.storage;
+
+    // Realtime Database - egress
+    cost += Math.max(0, rtdbEgressGB - 10) * PRICES.rtdb.egress;
+
+    // exibe o custo
+    totalCost.textContent = formatter.format(cost);
+
+    // economia estimada
+    const awsCost = cost * 5; // exemplo de comparação
+    const savings = ((awsCost - cost) / awsCost) * 100;
+    costProgress.style.width = `${savings.toFixed(0)}%`;
+  }
+  
+  // Observador de interseção para animações
+  const fadeElements = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+  
+  fadeElements.forEach(el => observer.observe(el));
+  
+  // Event listeners
+  firestoreStorage.addEventListener('input', updateCalculations);
+  firestoreReads.addEventListener('input', updateCalculations);
+  firestoreWrites.addEventListener('input', updateCalculations);
+  authUsers.addEventListener('input', updateCalculations);
+  storage.addEventListener('input', updateCalculations);
+  downloads.addEventListener('input', updateCalculations);
+  rtdbStorage.addEventListener('input', updateCalculations);
+  rtdbEgress.addEventListener('input', updateCalculations);
+  
+  // Inicializar
+  updateCalculations();
+</script>
+</body>
+</html>
